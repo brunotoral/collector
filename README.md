@@ -37,4 +37,4 @@ Seja bem-vindo a mais uma etapa do processo de seleção da Monde. Neste etapa v
 Não é necessário utilizar um framework para o front-end e nem criar cadastro e autenticação de usuários, consideraremos como bônus se fizer autenticação e/ou fizer um layout responsivo usando Bootstrap.
 
 # Isso é apenas um teste
-- Apesar de ser um problema aparentemente real de um sistema de faturamento, ele foi escrito apenas para teste. Seu código não será usado depois que o teste for finalizado.
+-a Apesar de ser um problema aparentemente real de um sistema de faturamento, ele foi escrito apenas para teste. Seu código não será usado depois que o teste for finalizado.
