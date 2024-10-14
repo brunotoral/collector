@@ -1,0 +1,30 @@
+<% content_for :title, "Editing customer" %>
+
+<h1>Editing customer</h1>
+
+<%= form_with model: @customer, local: true do |f| %>
+  <% if @customer.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
+
+      <ul>
+        <% @customer.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= render "form", f: f %>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<br>
+
+<div>
+  <%= link_to "Show this customer", @customer %> |
+  <%= link_to "Back to customers", customers_path %>
+</div>
