@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CustomersController < ApplicationController
-  before_action :set_customer, only: %i[ show edit update destroy ]
+  before_action :set_customer, only: %i[show edit update destroy]
 
   def index
     @customers = Customer.all
@@ -12,6 +12,7 @@ class CustomersController < ApplicationController
 
   def new
     @customer = Customer.new
+    @address = @customer.build_address
   end
 
   def edit

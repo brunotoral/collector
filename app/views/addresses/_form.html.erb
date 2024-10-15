@@ -1,0 +1,36 @@
+<%= f.fields_for :address, @address do |fa| %>
+  <div>
+    <%= fa.label :street %>
+    <%= fa.text_field :street, required: true %>
+  </div>
+
+  <div>
+    <%= fa.label :number %>
+    <%= fa.text_field :number %>
+  </div>
+
+  <div>
+    <%= fa.label :district %>
+    <%= fa.text_field :district, required: true %>
+  </div>
+
+  <div>
+    <%= fa.label :zipcode %>
+    <%= fa.text_field :zipcode, required: true %>
+  </div>
+
+  <div>
+    <%= fa.label :supplement %>
+    <%= fa.text_field :supplement %>
+  </div>
+
+  <div>
+    <%= fa.label :city %>
+    <%= fa.text_field :city, required: true %>
+  </div>
+
+  <div>
+    <%= fa.label :state %>
+    <%= fa.text_field :state, required: true %>
+  </div>
+<% end %>
