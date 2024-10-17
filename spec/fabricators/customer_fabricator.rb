@@ -3,4 +3,9 @@
 Fabricator(:customer) do
   due_day { Faker::Number.between from: 1, to: 31 }
   name { Faker::Movies::LordOfTheRings.character }
+  payment_method 'boleto'
+
+  after_build do |customer|
+    customer.address = Fabricate(:address, customer: customer)
+  end
 end
