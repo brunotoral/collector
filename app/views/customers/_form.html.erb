@@ -5,7 +5,12 @@
 
 <div>
   <%= f.label :due_day %>
-  <%= f.select :due_day, customer_due_day_for_select, include_blank: false %>
+  <%= f.select :due_day, due_days_for_select, include_blank: false %>
+</div>
+
+<div>
+  <%= f.label :payment_method %>
+  <%= f.select :payment_method, payment_methods_for_select %>
 </div>
 
 <div>

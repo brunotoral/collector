@@ -16,6 +16,7 @@ class CustomersController < ApplicationController
   end
 
   def edit
+    @address = @customer.address
   end
 
   def create
@@ -23,6 +24,7 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.save
+        @customer.create_next_invoice!
         format.html { redirect_to @customer, notice: "Customer was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -54,6 +56,6 @@ class CustomersController < ApplicationController
     end
 
     def customer_params
-      params.require(:customer).permit(:name, :due_day)
+      params.require(:customer).permit(:name, :due_day, :payment_method)
     end
 end

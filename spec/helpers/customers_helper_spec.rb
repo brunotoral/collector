@@ -1,15 +1,26 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
-# Specs in this file have access to a helper object that includes
-# the CustomersHelper. For example:
-#
-# describe CustomersHelper do
-#   describe "string concat" do
-#     it "concats two strings with spaces" do
-#       expect(helper.concat_strings("this","that")).to eq("this that")
-#     end
-#   end
-# end
 RSpec.describe CustomersHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#due_days_for_select' do
+    it 'returns an array of numbers from 1 to 31' do
+      expect(helper.due_days_for_select).to eq((1..31).to_a)
+    end
+  end
+
+  describe '#payment_methods_for_select' do
+    before do
+      allow(Payments).to receive(:method_names).and_return(['credit_card', 'boleto'])
+    end
+
+    it 'returns an array of pairs with humanized and original method name' do
+      expect(helper.payment_methods_for_select).to match(
+        [
+          ['Credit card', 'credit_card'],
+          ['Boleto', 'boleto']
+        ]
+      )
+    end
+  end
 end
