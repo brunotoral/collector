@@ -14,8 +14,4 @@ module Payments
   def self.for(name)
     Payments.processors[name] || raise(ProcessorNotFoundError, "Processor #{name} is not registered")
   end
-
-  def process
-    raise NotImplementedError, "your processor should implement this method"
-  end
 end

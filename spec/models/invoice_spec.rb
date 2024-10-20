@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
-  let!(:customer) { Fabricate(:customer, due_day: 31) }
-  subject(:invoice) { Fabricate(:invoice, customer:) }
+  let!(:customer) { Fabricate(:customer) }
+  subject(:invoice) { Fabricate(:invoice, status: [ :pending, :completed ].sample) }
 
   describe 'associations' do
     it { is_expected.to belong_to :customer }
@@ -21,10 +21,25 @@ RSpec.describe Invoice, type: :model do
   end
 
   it 'calculates the dua date correctly' do
-    today = Date.new(2024,01, 15)
+    today = Date.new(2024, 01, 15)
     expected_date = Date.new(2024, 02, 29)
+
     allow(Date).to receive(:today).and_return today
 
-    expect(invoice).to have_attributes due_date: expected_date
+    new_customer = Fabricate(:customer, due_day: 31)
+    new_invoice = Fabricate(:invoice, customer: new_customer)
+
+    expect(new_invoice).to have_attributes due_date: expected_date
+  end
+
+  describe '#unique_invoice_per_month' do
+    context 'when there has an invoice pending or completed for the next month' do
+      let!(:invoice) { Fabricate(:invoice, customer:, status: [ :pending, :completed ].sample) }
+
+      it 'raises and error' do
+        expect { customer.create_next_invoice! }.to raise_error ActiveRecord::RecordInvalid,
+  "Validation failed: There is already a completed or pending invoice for this customer this month."
+      end
+    end
   end
 end
