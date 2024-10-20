@@ -6,6 +6,6 @@ module CustomersHelper
   end
 
   def payment_methods_for_select
-    Payments.method_names.map { |m| [m.humanize, m] }
+    Payments.method_names.map { |m| [ m.humanize, m ] }
   end
 end

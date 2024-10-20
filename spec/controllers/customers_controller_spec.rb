@@ -44,5 +44,4 @@ RSpec.describe CustomersController, type: :controller do
       it_behaves_like 'a protected action'
     end
   end
-
 end

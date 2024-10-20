@@ -1,6 +1,15 @@
 <p style="color: green"><%= notice %></p>
 
 <%= render @customer %>
+<div>
+  <p>Address</p>
+
+  <%= render @customer.address %>
+</div>
+
+<p>
+  <%= link_to 'Invoices', customer_invoices_path(@customer) %>
+</p>
 
 <div>
   <%= link_to "Edit this customer", edit_customer_path(@customer) %> |

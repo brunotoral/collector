@@ -11,14 +11,14 @@ RSpec.describe CustomersHelper, type: :helper do
 
   describe '#payment_methods_for_select' do
     before do
-      allow(Payments).to receive(:method_names).and_return(['credit_card', 'boleto'])
+      allow(Payments).to receive(:method_names).and_return([ 'credit_card', 'boleto' ])
     end
 
     it 'returns an array of pairs with humanized and original method name' do
       expect(helper.payment_methods_for_select).to match(
         [
-          ['Credit card', 'credit_card'],
-          ['Boleto', 'boleto']
+          [ 'Credit card', 'credit_card' ],
+          [ 'Boleto', 'boleto' ]
         ]
       )
     end

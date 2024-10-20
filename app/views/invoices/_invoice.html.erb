@@ -1,0 +1,6 @@
+<div id="<%= dom_id invoice %>">
+  <p>Payment Method: <%= invoice.payment_method.humanize %></p>
+  <p>Next Payment at: <%= invoice.due_date %></p>
+  <p>Payment status: <%= invoice.status.humanize %></p>
+  <p>Comment: <%= invoice.comment %></p>
+</div>

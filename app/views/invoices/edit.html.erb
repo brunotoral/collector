@@ -1,0 +1,31 @@
+
+<% content_for :title, "Editing invoice" %>
+
+<h1>Editing invoice</h1>
+
+<%= form_with model: [@customer, @invoice], local: true do |f| %>
+  <% if @invoice.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@invoice.errors.count, "error") %> prohibited this customer from being saved:</h2>
+
+      <ul>
+        <% @invoice.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= render "form", f: f %>
+
+  <div>
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<br>
+
+<div>
+  <%= link_to "Show this invoice", customer_invoice_path(@customer, @invoice) %> |
+  <%= link_to "Back to invoices", customer_invoices_path(@customer) %>
+</div>

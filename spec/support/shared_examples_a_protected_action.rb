@@ -5,4 +5,3 @@ RSpec.shared_examples 'a protected action' do
     expect(response).to redirect_to new_user_session_url
   end
 end
-
