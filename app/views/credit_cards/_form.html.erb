@@ -1,0 +1,22 @@
+
+<%= f.fields_for :credit_card do |fc| %>
+  <div>
+    <%= fc.label :card_number %>
+    <%= fc.text_field :card_number %>
+  </div>
+
+  <div>
+    <%= fc.label :card_expiration_date %>
+    <%= fc.date_select(:card_expiration_date, start_year: Date.today.year, use_month_numbers: true, discard_day: true, include_blank: true) %>
+  </div>
+
+  <div>
+    <%= fc.label :card_cvv %>
+    <%= fc.text_field :card_cvv %>
+  </div>
+
+  <div>
+    <%= fc.label :card_holder_name %>
+    <%= fc.text_field :card_holder_name %>
+  </div>
+<% end %>

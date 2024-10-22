@@ -10,6 +10,8 @@ class Invoice < ApplicationRecord
 
   before_validation :calcule_due_date, on: :create
 
+  delegate :payment_processor, to: :customer
+
   private
 
   def calcule_due_date

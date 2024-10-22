@@ -20,42 +20,59 @@ class CustomersController < ApplicationController
   end
 
   def create
-    @customer = Customer.new(customer_params)
+    @customer = Customer.new(customer_params.except(:credit_card))
 
-    respond_to do |format|
-      if @customer.save
-        @customer.create_next_invoice!
-        format.html { redirect_to @customer, notice: "Customer was successfully created." }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-      end
+    if @customer.save
+      @customer.payment_processor.subscribe(customer_params[:credit_card])
+      @customer.create_next_invoice!
+
+      redirect_to @customer, notice: "Customer was successfully created."
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
   def update
-    respond_to do |format|
-      if @customer.update(customer_params)
-        format.html { redirect_to @customer, notice: "Customer was successfully updated." }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-      end
+    if @customer.update(customer_params.except(:credit_card))
+      redirect_to @customer, notice: "Customer was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @customer.destroy!
 
-    respond_to do |format|
-      format.html { redirect_to customers_path, status: :see_other, notice: "Customer was successfully destroyed." }
-    end
+    redirect_to customers_path, status: :see_other, notice: "Customer was successfully destroyed."
   end
 
   private
-    def set_customer
-      @customer = Customer.find(params[:id])
-    end
 
-    def customer_params
-      params.require(:customer).permit(:name, :due_day, :payment_method)
-    end
+  def set_customer
+    @customer = Customer.find(params[:id])
+  end
+
+  def customer_params
+    params.require(:customer).permit(
+      :name,
+      :due_day,
+      :payment_method,
+      address_attributes:
+      [
+        :street,
+        :zipcode,
+        :district,
+        :city,
+        :state,
+        :number,
+        :supplement
+      ],
+      credit_card: [
+        :card_number,
+        :card_expiration_date,
+        :card_cvv,
+        :card_holder_name
+      ]
+    )
+  end
 end

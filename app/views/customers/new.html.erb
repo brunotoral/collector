@@ -2,18 +2,8 @@
 
 <h1>New customer</h1>
 
-<%= form_with model: @customer, local: true do |f| %>
-  <% if @customer.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@customer.errors.count, "error") %> prohibited this customer from being saved:</h2>
-
-      <ul>
-        <% @customer.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with model: @customer, data: { controller: 'payment-form' },local: true do |f| %>
+  <%= user_facing_errors @customer %>
 
   <%= render "form", f: f %>
 

@@ -4,17 +4,7 @@
 <h1>Editing invoice</h1>
 
 <%= form_with model: [@customer, @invoice], local: true do |f| %>
-  <% if @invoice.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@invoice.errors.count, "error") %> prohibited this customer from being saved:</h2>
-
-      <ul>
-        <% @invoice.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= user_facing_errors @invoice %>
 
   <%= render "form", f: f %>
 

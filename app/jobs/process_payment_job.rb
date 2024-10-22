@@ -3,11 +3,6 @@
 class ProcessPaymentJob < ApplicationJob
   queue_as :default
 
-  # on rake
-  # due_date = Date.today
-  # invoices = Invoice.pending.where(due_date:).include(:customer)
-  # invoices.each { |invoice| ProcessPaymentJob.perform_later invoice }
-  #
   retry_on StandardError, wait: 30.seconds, attempts: 3 do |job, error|
     job.arguments[0].update!(
       status: :failed,
@@ -17,7 +12,7 @@ class ProcessPaymentJob < ApplicationJob
     log_error(job.job_id, error.message)
   end
 
-  discard_on NotImplementedError do |job, error|
+  discard_on NotImplementedError, Payments::ProcessorNotFoundError, ActiveRecord::RecordInvalid do |job, error|
     job.arguments[0].update!(
       status: :failed,
       comment: error.message
@@ -28,12 +23,13 @@ class ProcessPaymentJob < ApplicationJob
 
   def perform(invoice)
     invoice.with_lock do
-      processor = Payments.for(invoice.payment_method)
+      processor = invoice.payment_processor
 
-      processor.new(invoice).process
+      processor.charge(invoice)
 
       invoice.completed!
-      Rails.logger.info invoice.status
+
+
       invoice.customer.create_next_invoice!
     end
   end

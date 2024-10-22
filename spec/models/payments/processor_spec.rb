@@ -7,23 +7,23 @@ RSpec.describe Payments::Processor, type: :model do
     TestProcessor = Class.new do
       include Payments::Processor
 
-      def process
-        'Processed!'
+      def charge(invoice)
+        "Processed! #{invoice}"
       end
     end
   end
-  describe '#process' do
-    context 'when processor does not implement the process method' do
+  describe '#charge' do
+    context 'when processor does not implement the charge method' do
       it 'raises a NotImplementedError' do
         processor_class = Class.new { include Payments::Processor }
 
-        expect { processor_class.new.process }.to raise_error(NotImplementedError)
+        expect { processor_class.new.charge('invoice') }.to raise_error(NotImplementedError)
       end
     end
 
     context 'when processor implements the process method' do
       it "calls the processor's process method" do
-        expect(processor.new.process).to be 'Processed!'
+        expect(processor.new.charge('invoice')).to eq 'Processed! invoice'
       end
     end
   end

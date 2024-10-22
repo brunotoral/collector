@@ -1,28 +1,48 @@
 # frozen_string_literal: true
 
-class StripeBoleto
-end
 module Payments
   module Processors
     class BoletoProcessor
       include Payments::Processor
 
-      def initialize(invoice, adapter = StripeBoleto.new)
-        @invoice = invoice
-        @adapter = adapter
-        @customer = invoice.customer
+      def initialize(customer)
+        @customer = customer
       end
 
-      def process
-        customer.name
-        # Stripe::CreditCard.new(
-        # uid: customer.payment_info
-        # ).charge
+      def subscribe(options)
+        nil
+      end
+
+      def charge(invoice, amount = 50)
+        transaction = PagarMeBoleto.create(
+          amount:,
+          payment_method: invoice.payment_method,
+          customer: {
+            email: customer.email
+          }
+        )
+
+        BoletoMailer.perform_later customer, transaction[:url]
       end
 
       private
 
-      attr_reader :adapter, :invoice, :customer
+      attr_reader :customer
+    end
+  end
+end
+
+class PagarMeBoleto
+  class ConectionError < StandardError; end
+
+  def self.create(**opts)
+    bar = [ 1, 2, 3, 4, 5, 6 ].sample
+    if bar.even?
+      raise ConectionError, "Conection Error"
+    else
+      {
+        url: "http://boleto.com.io"
+      }
     end
   end
 end

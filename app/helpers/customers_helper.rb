@@ -8,4 +8,12 @@ module CustomersHelper
   def payment_methods_for_select
     Payments.method_names.map { |m| [ m.humanize, m ] }
   end
+
+  def render_if_credit_card(credit_card)
+    return if credit_card.nil?
+
+    tag.div do
+      render credit_card
+    end
+  end
 end

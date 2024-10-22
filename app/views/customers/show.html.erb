@@ -1,11 +1,14 @@
-<p style="color: green"><%= notice %></p>
-
 <%= render @customer %>
+
+<%= render_if_credit_card @customer.credit_card %>
+
 <div>
   <p>Address</p>
 
   <%= render @customer.address %>
 </div>
+
+
 
 <p>
   <%= link_to 'Invoices', customer_invoices_path(@customer) %>

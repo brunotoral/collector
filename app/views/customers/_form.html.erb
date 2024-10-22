@@ -10,7 +10,13 @@
 
 <div>
   <%= f.label :payment_method %>
-  <%= f.select :payment_method, payment_methods_for_select %>
+  <%= f.select :payment_method, payment_methods_for_select, { include_blank: false }, { 'data-payment-form-target' => 'paymentMethod' } %>
+</div>
+
+<div data-payment-form-target="creditCardForm" style="display:none">
+  <p>Credit Card</p>
+
+  <%= render 'credit_cards/form', f: f %>
 </div>
 
 <div>
