@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_20_131608) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_22_235400) do
   create_table "addresses", force: :cascade do |t|
     t.integer "customer_id", null: false
     t.string "street", null: false
@@ -42,6 +42,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_20_131608) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "payment_method", null: false
+    t.string "email", null: false
     t.check_constraint "due_day >= 1 AND due_day <= 31", name: "due_day_range"
   end
 

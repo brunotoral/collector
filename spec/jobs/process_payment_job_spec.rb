@@ -8,6 +8,7 @@ RSpec.describe ProcessPaymentJob, type: :job do
 
   before do
     allow(Rails.logger).to receive(:error)
+    allow(Rails.logger).to receive(:info)
   end
 
   context 'when StandardError is raised' do
@@ -93,6 +94,14 @@ RSpec.describe ProcessPaymentJob, type: :job do
       last_invoice = invoice.customer.invoices.last
 
       expect(last_invoice).to be_pending
+    end
+
+    it 'logs the error info' do
+      perform_enqueued_jobs do
+        job
+      end
+
+      expect(Rails.logger).to have_received(:info).with(include(ProcessPaymentJob.to_s, invoice.customer.name))
     end
   end
 

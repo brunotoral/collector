@@ -9,12 +9,13 @@ module Payments
         @customer = customer
       end
 
-      def subscribe(opts)
-        transaction = subscriibe_card
+      def subscribe(options = {})
+        transaction = subscriibe_card(**options)
+
         customer.create_credit_card! transaction
       end
 
-      def charge(invoice, amount = 50)
+      def charge(invoice, amount = 50_000)
         PagarMeCard.charge(
           amount:,
           payment_method: invoice.payment_method,
@@ -24,7 +25,7 @@ module Payments
 
       private
 
-      def subscribe_card
+      def subscribe_card(params)
         PagarMeCard.create(
           number: params[:card_number],
           expiration_date: params[:card_expiration_date],

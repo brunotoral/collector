@@ -1,0 +1,37 @@
+<div>
+  <h1>Today Report</h1>
+
+  <div role="group">
+    <div>Filter</div>
+    <%= link_to 'Failed', invoice_reports_path(filter: 'failed') %>
+    <%= link_to 'Completed', invoice_reports_path(filter: 'completed') %>
+    <%= link_to 'Clear filter', invoice_reports_path %>
+  </div>
+
+  <div>
+    <% @invoices.each do |invoice| %>
+      <%= render 'invoice_reports/invoice', invoice: invoice %>
+    <% end %>
+  </div>
+</div>
+
+<table id="reports" class="striped">
+  <thead data-theme="light">
+    <tr>
+      <th scope="col">Customer name</th>
+      <th scope="col">Customer Email</th>
+      <th scope="col">Payment Method</th>
+      <th scope="col">Due Date</th>
+      <th scope="col">Status</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @invoices.each do |invoice| %>
+      <tr id="<%= dom_id invoice %>">
+        <%= render 'invoice_reports/invoice', invoice: invoice %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

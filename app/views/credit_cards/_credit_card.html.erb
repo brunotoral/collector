@@ -1,13 +1,18 @@
-<p>
-Token: <%= credit_card.token %>
-</p>
-<p>
-Last igits: <%= credit_card.last_digits %>
-</p>
-<p>
-Brand: <%= credit_card.brand %>
-</p>
-<p>
-Expiration date: <%= credit_card.expiration_date %>
-</p>
+<h4>Credit Card</h4>
 
+<table id="credit_card" class="striped">
+  <thead data-theme="light">
+    <tr>
+      <th scope="col">Last igits</th>
+      <th scope="col">Brand</th>
+      <th scope="col">Expiration Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="<%= dom_id credit_card %>">
+      <th scope="row"><%= credit_card.last_digits %></th>
+      <td><%= credit_card.brand %></td>
+      <td><%= credit_card.expiration_date %></td>
+    </tr>
+  </tbody>
+</table>

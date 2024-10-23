@@ -1,0 +1,8 @@
+<th scope= "row"><%= invoice.customer.name %></th>
+<td><%= invoice.customer.email %></td>
+<td><%= invoice.payment_method.humanize %></td>
+<td><%= invoice.due_date %></td>
+<td><%= invoice.status.humanize %></td>
+<td>
+<%= link_to 'See details', customer_invoice_path(invoice.customer, invoice) %>
+</td>

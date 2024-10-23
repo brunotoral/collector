@@ -1,5 +1,4 @@
-<div id="<%= dom_id customer %>">
-  <p>name: <%= customer.name %></p>
-  <p>Due day: <%= customer.due_day %></p>
-  <p>Payment Method: <%= customer.payment_method.humanize %></p>
-</div>
+  <th scope="row"><%= customer.name %></th>
+  <td><%= customer.email %></td>
+  <td><%= customer.due_day %></td>
+  <td><%= customer.payment_method.humanize %></td>

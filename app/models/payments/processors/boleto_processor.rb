@@ -9,11 +9,11 @@ module Payments
         @customer = customer
       end
 
-      def subscribe(options)
+      def subscribe(options = {})
         nil
       end
 
-      def charge(invoice, amount = 50)
+      def charge(invoice, amount = 50_000)
         transaction = PagarMeBoleto.create(
           amount:,
           payment_method: invoice.payment_method,
@@ -22,7 +22,10 @@ module Payments
           }
         )
 
-        BoletoMailer.perform_later customer, transaction[:url]
+        PaymentMailer.with(
+          customer:,
+          url: transaction[:url]
+        ).boleto_email.deliver_later
       end
 
       private

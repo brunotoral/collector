@@ -4,12 +4,15 @@ require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
   let!(:customer) { Fabricate(:customer) }
-  subject(:invoice) { Fabricate(:invoice, status: [ :pending, :completed ].sample) }
+  subject(:invoice) { Fabricate(:invoice, status: :completed) }
 
   describe 'associations' do
     it { is_expected.to belong_to :customer }
   end
 
+  describe 'delegations' do
+    it { is_expected.to delegate_method(:payment_processor).to(:customer) }
+  end
   describe 'validations' do
     it { is_expected.to validate_presence_of :payment_method }
     it { is_expected.to validate_presence_of :due_date }

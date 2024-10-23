@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe Payments, type: :model do
-  let!(:processor) { TestProcessor }
+  let(:processor) { TestProcessor }
 
   before(:all) do
     TestProcessor = Class.new

@@ -1,14 +1,27 @@
 <% content_for :title, "Invoices" %>
 
-<h1>Invoices</h1>
+<h4>Invoices</h4>
 
-<div id="invoices">
-  <% @invoices.each do |invoice| %>
-    <%= render invoice %>
-    <p>
-      <%= link_to 'Show Invoice', customer_invoice_path(@customer, invoice) %>
-    </p>
-  <% end %>
-</div>
-<%= link_to 'Back', customer_path(@customer) %>
+<table id="invoices" class="striped">
+  <thead data-theme="light">
+    <tr>
+      <th scope="col">Payment Method</th>
+      <th scope="col">Due Date</th>
+      <th scope="col">Status</th>
+      <th scope="col">Comment</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @invoices.each do |invoice| %>
+      <tr id="<%= dom_id invoice %>">
+        <%= render invoice %>
+        <td><%= link_to "Edit", edit_customer_invoice_path(@customer, invoice) %>
+</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back to customer', customer_path(@customer) %>
 

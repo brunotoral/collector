@@ -31,10 +31,17 @@ class ProcessPaymentJob < ApplicationJob
 
 
       invoice.customer.create_next_invoice!
+
+      log_info(invoice)
     end
   end
 
   def self.log_error(job_id, message)
     Rails.logger.error "#{self} failed (JOB ID: #{job_id}): #{message}"
+  end
+
+  def log_info(invoice)
+    Rails.logger.info "#{self}: Invoice payment processed for customer #{invoice.customer.name}.\
+      Payment method #{invoice.payment_method}"
   end
 end

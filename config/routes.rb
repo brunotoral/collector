@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     resources :invoices, except: %i[new create destroy]
   end
 
+  get 'invoice_reports',  to: 'invoice_reports#index'
+
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

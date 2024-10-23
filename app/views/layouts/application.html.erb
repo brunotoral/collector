@@ -8,7 +8,10 @@
     <%= csp_meta_tag %>
 
     <%= yield :head %>
-
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
@@ -18,9 +21,13 @@
   </head>
 
   <body>
-    <p class="notice" style="color: green"><%= notice %></p>
-    <p class="alert" style="color: red"><%= alert %></p>
+    <main class="container">
+      <%= render 'navbar' %>
 
-    <%= yield %>
+      <p class="notice" style="color: green"><%= notice %></p>
+      <p class="alert" style="color: red"><%= alert %></p>
+
+      <%= yield %>
+    </main>
   </body>
 </html>

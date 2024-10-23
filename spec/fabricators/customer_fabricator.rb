@@ -2,6 +2,7 @@
 
 Fabricator(:customer) do
   due_day { Faker::Number.between from: 1, to: 31 }
+  email { Faker::Internet.email }
   name { Faker::Movies::LordOfTheRings.character }
   payment_method 'boleto'
 

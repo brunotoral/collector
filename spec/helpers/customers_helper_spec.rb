@@ -15,6 +15,7 @@ RSpec.describe CustomersHelper, type: :helper do
 
     context 'when credit card is nil' do
       let(:credit_card) { nil }
+
       it 'returns nil' do
         result = helper.render_if_credit_card(credit_card)
         expect(result).to be_nil

@@ -1,22 +1,46 @@
-<%= render @customer %>
+<h4>Customer</h4>
+
+<table id="customer" class="striped">
+  <thead data-theme="light">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Due Day</th>
+      <th scope="col">Payment Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="<%= dom_id @customer %>">
+      <%= render @customer %>
+    </tr>
+  </tbody>
+</table>
 
 <%= render_if_credit_card @customer.credit_card %>
 
-<div>
-  <p>Address</p>
+<h4>Address</h4>
 
-  <%= render @customer.address %>
-</div>
+<table id="address" class="striped">
+  <thead data-theme="light">
+    <tr>
+      <th scope="col">Street</th>
+      <th scope="col">Number</th>
+      <th scope="col">City</th>
+      <th scope="col">State</th>
+      <th scope="col">Zipcode</th>
+      <th scope="col">Supplement</th>
+      <th scope="col">District</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="<%= dom_id @customer.address %>">
+      <%= render @customer.address %>
+    </tr>
+  </tbody>
+</table>
 
-
-
-<p>
-  <%= link_to 'Invoices', customer_invoices_path(@customer) %>
-</p>
-
-<div>
-  <%= link_to "Edit this customer", edit_customer_path(@customer) %> |
+<div role="group">
   <%= link_to "Back to customers", customers_path %>
-
-  <%= button_to "Destroy this customer", @customer, method: :delete %>
+  <%= link_to "Edit", edit_customer_path(@customer) %> 
+  <%= button_to "Destroy", @customer, method: :delete %>
 </div>

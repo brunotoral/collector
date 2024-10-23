@@ -1,14 +1,24 @@
 <% content_for :title, "Customers" %>
 
-<h1>Customers</h1>
+<h4>Customers</h4>
 
-<div id="customers">
-  <% @customers.each do |customer| %>
-    <%= render customer %>
-    <p>
-      <%= link_to "Show this customer", customer %>
-    </p>
-  <% end %>
-</div>
+<table id="customers" class="striped">
+  <thead data-theme="light">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Due Day</th>
+      <th scope="col">Payment Method</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @customers.each do |customer| %>
+      <tr id="<%= dom_id customer %>">
+        <%= render customer %>
+        <td><%= link_to "Show", customer %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
-<%= link_to "New customer", new_customer_path %>

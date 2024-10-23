@@ -8,22 +8,24 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 #
+return if Rails.env.test?
 
 # Create a User
-user = Fabricate(:user, email: 'admin@collector.com')
+Fabricate(:user, email: 'admin@collector.com')
 
 # Create two Customer to every registred Payment method
 
 today = Date.today
 
-Payment.method_names.each do |method|
-  Fabricate(:customer, due_day: today.day, payment_method: method)
-  Fabricate(:customer, payment_method: method)
+Payments.method_names.each do |method|
+  customer_one = Fabricate(:customer, due_day: today.day, payment_method: method)
+  customer_two = Fabricate(:customer, payment_method: method)
+  # Credit Card criar
+  if method.eql? 'credit_card'
+    Fabricate(:credit_card, customer: customer_one)
+    Fabricate(:credit_card, customer: customer_two)
+  end
 end
-
-# Credit Card criar
-#
-#
 
 # Create invoice and update due_date to process the payment today
 customers = Customer.where(due_day: today.day)

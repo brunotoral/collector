@@ -1,6 +1,4 @@
-<div id="<%= dom_id invoice %>">
-  <p>Payment Method: <%= invoice.payment_method.humanize %></p>
-  <p>Next Payment at: <%= invoice.due_date %></p>
-  <p>Payment status: <%= invoice.status.humanize %></p>
-  <p>Comment: <%= invoice.comment %></p>
-</div>
+<th scope= "row"><%= invoice.payment_method.humanize %></th>
+<td><%= invoice.due_date %></td>
+<td><%= invoice.status.humanize %></td>
+<td><%= invoice.comment %></td>
