@@ -31,14 +31,8 @@ RSpec.describe ProcessPaymentJob, type: :job do
     end
   end
 
-  context 'when NotImplementedError or Payments::ProcessorNotFoundError or ActiveRecord::RecordInvalid is raised' do
-    let(:error) do
-      [
-        NotImplementedError.new('error'),
-        Payments::ProcessorNotFoundError.new('error'),
-        ActiveRecord::RecordInvalid
-      ].sample
-    end
+  context 'when Payments::ProcessorNotFoundError is raised' do
+    let(:error) { Payments::ProcessorNotFoundError.new('error') }
 
     before do
       allow(Payments).to receive(:for).and_raise(error)

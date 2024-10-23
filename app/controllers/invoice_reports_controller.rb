@@ -9,7 +9,9 @@ class InvoiceReportsController < ApplicationController
 
   def filtered_invoices
     if %w[completed failed].include? params[:filter].to_s
-      base_query.send(params[:filter])
+      method = params[:filter] == "completed" ? :completed : :failed
+
+      base_query.send(method, *args)
     else
       base_query
     end

@@ -63,4 +63,66 @@ RSpec.describe Customer, type: :model do
       end
     end
   end
+
+  describe "#has_pending_or_completed_invoice_for_next_month?" do
+    let(:customer) { Fabricate(:customer, payment_method: 'test_method') }
+    let(:next_month) { Date.today.next_month.month }
+    let(:last_invoice) { customer.invoices.last }
+
+    context "when customer has no invoices" do
+      it "returns false" do
+        expect(customer.has_pending_or_completed_invoice_for_next_month?).to be_falsy
+      end
+    end
+
+    context "when customer has a completed invoice for next month" do
+      let!(:invoice) do
+        Fabricate(:invoice, customer:, due_date: next_month, status: :completed)
+      end
+
+      it "returns true" do
+        expect(customer.has_pending_or_completed_invoice_for_next_month?).to be(true)
+      end
+    end
+
+    context "when customer has a pending invoice for next month" do
+      let!(:invoice) do
+        Fabricate(:invoice, customer:, due_date: next_month, status: :pending)
+      end
+
+      it "returns true" do
+        expect(customer.has_pending_or_completed_invoice_for_next_month?).to be_truthy
+      end
+    end
+  end
+
+  describe "#payment_processor" do
+    let(:customer) { Fabricate(:customer, payment_method:) }
+    let(:payment_method) { "credit_card" }
+  let(:processor) do
+    Class.new do
+      include Payments::Processor
+
+      def initialize(customer)
+        @customer = customer
+      end
+    end
+  end
+
+  before do
+    Payments.configure do |config|
+      config.processors[payment_method] = processor
+    end
+  end
+
+  after do
+    Payments.configure do |config|
+      config.processors = {}
+    end
+  end
+
+    it "returns the correct payment processor" do
+      expect(customer.payment_processor).to be_a processor
+    end
+  end
 end

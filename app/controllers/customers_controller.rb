@@ -55,6 +55,7 @@ class CustomersController < ApplicationController
   def customer_params
     params.require(:customer).permit(
       :name,
+      :email,
       :due_day,
       :payment_method,
       address_attributes:

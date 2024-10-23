@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Payments::Processor, type: :model do
   let!(:processor) do
-    TestProcessor = Class.new do
+    Class.new do
       include Payments::Processor
 
       def charge(invoice)

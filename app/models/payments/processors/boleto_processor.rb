@@ -5,6 +5,8 @@ module Payments
     class BoletoProcessor
       include Payments::Processor
 
+      class ConnectionError < StandardError; end
+
       def initialize(customer)
         @customer = customer
       end
@@ -14,38 +16,49 @@ module Payments
       end
 
       def charge(invoice, amount = 50_000)
-        transaction = PagarMeBoleto.create(
+        transaction = create_transaction(invoice, amount)
+
+        send_notification(customer, transaction[:url])
+      rescue StandardError => e
+        log_and_raise_error e
+      end
+
+      private
+
+      attr_reader :customer
+
+      def send_notification(customer, url)
+        PaymentMailer.with(
+          customer:,
+          url:,
+        ).boleto_email.deliver_later
+      end
+
+      def create_transaction(invoice, amount)
+        PagarMe::Boleto.create(
           amount:,
           payment_method: invoice.payment_method,
           customer: {
             email: customer.email
           }
         )
-
-        PaymentMailer.with(
-          customer:,
-          url: transaction[:url]
-        ).boleto_email.deliver_later
       end
 
-      private
+      def log_and_raise_error(error)
+        case error
+        when PagarMe::Boleto::ConnectionError
+          log_error(error)
+          raise ConnectionError, "Connection error. Try again later."
+        else
+          log_error(error)
+          raise error
+        end
+      end
 
-      attr_reader :customer
+      def log_error(error)
+        Rails.logger.error "#{self}: Error: #{error.message} fo customer: #{customer.email}"
+      end
     end
   end
 end
 
-class PagarMeBoleto
-  class ConectionError < StandardError; end
-
-  def self.create(**opts)
-    bar = [ 1, 2, 3, 4, 5, 6 ].sample
-    if bar.even?
-      raise ConectionError, "Conection Error"
-    else
-      {
-        url: "http://boleto.com.io"
-      }
-    end
-  end
-end

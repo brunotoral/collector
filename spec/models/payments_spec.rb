@@ -3,13 +3,17 @@
 require 'rails_helper'
 
 RSpec.describe Payments, type: :model do
-  let(:processor) { TestProcessor }
+  let(:processor) { Class.new }
 
-  before(:all) do
-    TestProcessor = Class.new
-
+  before do
     Payments.configure do |config|
-      config.processors['test_method'] = TestProcessor
+      config.processors['test_method'] = processor
+    end
+  end
+
+  after do
+    Payments.configure do |config|
+      config.processors = {}
     end
   end
 

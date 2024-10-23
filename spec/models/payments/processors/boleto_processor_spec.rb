@@ -6,17 +6,21 @@ RSpec.describe Payments::Processors::BoletoProcessor, type: :model do
   let(:customer) { Fabricate(:customer, payment_method: 'boleto') }
   let(:invoice) { Fabricate(:invoice, customer: customer) }
   let(:processor) { customer.payment_processor }
+  let(:adapter) { PagarMe::Boleto }
+  let(:mailer) { PaymentMailer }
+  let(:url) { "foobar.com/boleto" }
   let(:params) do
     {
       foo: 'bar',
       bar: 'foo'
-}
+    }
   end
-  let(:api_response) { { url: 'foobar.com/boleto' } }
+  let(:api_response) { { url: url } }
 
   before do
     allow(Payments).to receive(:for).with('boleto').and_return(described_class)
-    allow(PagarMeBoleto).to receive(:create).and_return(api_response)
+    allow(adapter).to receive(:create).and_return(api_response)
+    allow(mailer).to receive(:with).and_call_original
   end
 
   describe 'subscribe' do
@@ -26,17 +30,40 @@ RSpec.describe Payments::Processors::BoletoProcessor, type: :model do
   end
 
   describe 'charge' do
+    it 'calls the adapter with right arguments' do
+      processor.charge(invoice)
+
+      expect(adapter).to have_received(:create).with(
+        amount: 50_000,
+        payment_method: invoice.payment_method,
+        customer: {
+          email: customer.email
+        }
+      )
+    end
+
     context 'when succesfuly charges' do
-      it 'calls the adapter with right arguments' do
+      it 'calls the mailer with right arguments' do
         processor.charge(invoice)
 
-        expect(PagarMeBoleto).to have_received(:create).with(
-          amount: 50_000,
-          payment_method: invoice.payment_method,
-          customer: {
-            email: customer.email
-          }
-        )
+        expect(mailer).to have_received(:with).with(customer:, url:)
+      end
+    end
+
+    context 'when there has an error' do
+      let(:error) { PagarMe::Boleto::ConnectionError }
+      let(:expected_error) { Payments::Processors::BoletoProcessor::ConnectionError }
+      let(:message) { "Connection error. Try again later." }
+
+      before do
+        allow(adapter).to receive(:create).and_raise(error)
+      end
+
+      it 'raises and logs the correct error and message' do
+        allow(Rails.logger).to receive(:error)
+
+        expect { processor.charge(invoice) }.to raise_error expected_error, message
+        expect(Rails.logger).to have_received(:error).once
       end
     end
   end

@@ -27,13 +27,21 @@ Payments.method_names.each do |method|
   end
 end
 
-# Create invoice and update due_date to process the payment today
-customers = Customer.where(due_day: today.day)
+# Create invoices
+today_customers = Customer.where(due_day: today.day)
+not_today_customers = Customer.where.not(due_day: today.day)
 
-customers.each do |customer|
-  customer.create_next_invoice!
+create_and_update_invoice(today_customers, today)
+create_and_update_invoice(not_today_customers)
 
-  invoice = customer.invoices.last
+def create_and_update_invoice(customer, date = nil)
+  customers.each do |customer|
+    customer.create_next_invoice!
 
-  invoice.update!(due_date: today)
+    if date
+      invoice = customer.invoices.last
+
+      invoice.update!(due_date: date)
+    end
+  end
 end

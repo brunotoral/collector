@@ -7,7 +7,7 @@
 
   <div>
     <%= fc.label :card_expiration_date %>
-    <%= fc.date_select(:card_expiration_date, start_year: Date.today.year, use_month_numbers: true, discard_day: true, include_blank: true) %>
+    <%= fc.text_field :card_expiration_date, placeholder: 'MM/YY' %>
   </div>
 
   <div>

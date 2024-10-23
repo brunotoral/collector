@@ -4,6 +4,11 @@
 </div>
 
 <div>
+  <%= f.label :email %>
+  <%= f.text_field :email, required: true %>
+</div>
+
+<div>
   <%= f.label :due_day %>
   <%= f.select :due_day, due_days_for_select, include_blank: false %>
 </div>

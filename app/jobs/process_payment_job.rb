@@ -12,7 +12,7 @@ class ProcessPaymentJob < ApplicationJob
     log_error(job.job_id, error.message)
   end
 
-  discard_on NotImplementedError, Payments::ProcessorNotFoundError, ActiveRecord::RecordInvalid do |job, error|
+  discard_on NotImplementedError, Payments::ProcessorNotFoundError, ActiveRecord::RecordInvalid, Payments::Processors::CreditCardProcessor::NoFundsError do |job, error|
     job.arguments[0].update!(
       status: :failed,
       comment: error.message

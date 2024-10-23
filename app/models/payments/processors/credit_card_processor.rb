@@ -5,28 +5,43 @@ module Payments
     class CreditCardProcessor
       include Payments::Processor
 
+      class ConnectionError < StandardError; end
+      class NoFundsError < StandardError; end
+
       def initialize(customer)
         @customer = customer
       end
 
       def subscribe(options = {})
-        transaction = subscriibe_card(**options)
+        transaction = subscribe_card(**options.to_h)
 
         customer.create_credit_card! transaction
       end
 
       def charge(invoice, amount = 50_000)
-        PagarMeCard.charge(
+        PagarMe::Card.charge(
           amount:,
           payment_method: invoice.payment_method,
           card_id: customer.credit_card.token
         )
+
+        send_notification(customer)
+      rescue StandardError => e
+        log_and_raise_error e
       end
 
       private
 
-      def subscribe_card(params)
-        PagarMeCard.create(
+      attr_reader :customer
+
+      def send_notification(customer)
+        PaymentMailer.with(
+          customer:
+        ).credit_card_email.deliver_later
+      end
+
+      def subscribe_card(params = {})
+        PagarMe::Card.create(
           number: params[:card_number],
           expiration_date: params[:card_expiration_date],
           cvv: params[:card_cvv],
@@ -35,32 +50,24 @@ module Payments
         )
       end
 
-      attr_reader :customer
+      def log_and_raise_error(error)
+        case error
+        when PagarMe::Card::ConnectionError
+          log_error(error)
+          raise ConnectionError, "Connection error. Try again later."
+        when PagarMe::Card::NoFundsError
+          log_error(error)
+          raise NoFundsError, "No funds."
+        else
+          log_error(error)
+          raise error
+        end
+      end
+
+      def log_error(error)
+        Rails.logger.error "#{self}: Error: #{error.message} fo customer: #{customer.email}"
+      end
     end
   end
 end
 
-class PagarMeCard
-  class ConectionError < StandardError; end
-  class NoFundError < StandardError; end
-
-  def self.create(**opts)
-    {
-      token: SecureRandom.urlsafe_base64,
-      brand: %w[Visa Mastercard AmericanExpress Discover].sample,
-      last_digits: opts[:number][-4..-1],
-      expiration_date: opts[:expiration_date]
-    }
-  end
-
-  def self.charge(**opts)
-    bar = [ 1, 2, 3, 4, 5, 6 ].sample
-    if [ 1, 2 ].include? bar
-      raise ConectionError, "Conection Error"
-    elsif [ 3, 4 ].include? bar
-      reise NoFundError, "Does not have money"
-    else
-      true
-    end
-  end
-end
