@@ -6,6 +6,7 @@ class Customer < ApplicationRecord
   has_many :invoices, dependent: :destroy
 
   validates :name, :payment_method, :email, presence: true
+  validates :email, uniqueness: { case_sensitive: false }, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :due_day, numericality: { in: 1..31 }, presence: true
 
   accepts_nested_attributes_for :address

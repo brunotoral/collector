@@ -16,7 +16,7 @@ module Payments
       end
 
       def charge(invoice, amount = 50_000)
-        transaction = create_transaction(invoice, amount)
+        transaction = create_transaction!(invoice, amount)
 
         send_notification(customer, transaction[:url])
       rescue StandardError => e
@@ -34,7 +34,7 @@ module Payments
         ).boleto_email.deliver_later
       end
 
-      def create_transaction(invoice, amount)
+      def create_transaction!(invoice, amount)
         PagarMe::Boleto.create(
           amount:,
           payment_method: invoice.payment_method,
@@ -61,4 +61,3 @@ module Payments
     end
   end
 end
-

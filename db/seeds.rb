@@ -10,24 +10,30 @@
 #
 return if Rails.env.test?
 
-# Create a User
+
+puts "########## Creating User. email: admin@collecto.com password: 1q2w3e4r"
+
 Fabricate(:user, email: 'admin@collector.com')
 
-# Create two Customer to every registred Payment method
+puts "########## User Created!"
 
 today = Date.today
+
+puts "########## Create two Customer to each registred Payment method"
 
 Payments.method_names.each do |method|
   customer_one = Fabricate(:customer, due_day: today.day, payment_method: method)
   customer_two = Fabricate(:customer, payment_method: method)
-  # Credit Card criar
+
   if method.eql? 'credit_card'
+    puts "########## Creating Credit card."
+
     Fabricate(:credit_card, customer: customer_one)
     Fabricate(:credit_card, customer: customer_two)
   end
 end
 
-# Create invoices
+puts "########## Creating invoices"
 today_customers = Customer.where(due_day: today.day)
 not_today_customers = Customer.where.not(due_day: today.day)
 
@@ -45,3 +51,5 @@ def create_and_update_invoice(customer, date = nil)
     end
   end
 end
+
+puts "########## Seed finished ##########"

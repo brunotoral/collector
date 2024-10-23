@@ -19,11 +19,7 @@ module Payments
       end
 
       def charge(invoice, amount = 50_000)
-        PagarMe::Card.charge(
-          amount:,
-          payment_method: invoice.payment_method,
-          card_id: customer.credit_card.token
-        )
+        create_transaction!(invoice, amount)
 
         send_notification(customer)
       rescue StandardError => e
@@ -33,6 +29,14 @@ module Payments
       private
 
       attr_reader :customer
+
+      def create_transaction!(invoice, amount)
+        PagarMe::Card.charge(
+          amount:,
+          payment_method: invoice.payment_method,
+          card_id: customer.credit_card.token
+        )
+      end
 
       def send_notification(customer)
         PaymentMailer.with(
@@ -70,4 +74,3 @@ module Payments
     end
   end
 end
-

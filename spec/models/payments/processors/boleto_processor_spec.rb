@@ -4,15 +4,17 @@ require 'rails_helper'
 
 RSpec.describe Payments::Processors::BoletoProcessor, type: :model do
   let(:customer) { Fabricate(:customer, payment_method: 'boleto') }
-  let(:invoice) { Fabricate(:invoice, customer: customer) }
+  let(:invoice) { Fabricate(:invoice, customer:) }
   let(:processor) { customer.payment_processor }
   let(:adapter) { PagarMe::Boleto }
   let(:mailer) { PaymentMailer }
   let(:url) { "foobar.com/boleto" }
   let(:params) do
     {
-      foo: 'bar',
-      bar: 'foo'
+      card_number: "1000000000001234",
+      card_expiration_date: '02/27',
+      card_cvv: '765',
+      card_holder_name: 'Frodo'
     }
   end
   let(:api_response) { { url: url } }
@@ -66,5 +68,5 @@ RSpec.describe Payments::Processors::BoletoProcessor, type: :model do
         expect(Rails.logger).to have_received(:error).once
       end
     end
-  end
+    end
 end

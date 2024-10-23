@@ -12,10 +12,15 @@ RSpec.describe Customer, type: :model do
   end
 
   describe 'validations' do
+    let!(:customer) { Fabricate(:customer) }
+
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_presence_of :email }
     it { is_expected.to validate_presence_of :due_day }
     it { is_expected.to validate_numericality_of(:due_day).is_in 1..31 }
+    it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+    it { is_expected.to allow_value('user@example.com').for(:email) }
+    it { is_expected.not_to allow_value('invalid_email').for(:email) }
   end
 
   describe '.create_next_invoice!' do
@@ -62,7 +67,7 @@ RSpec.describe Customer, type: :model do
         expect(last_invoice).to be_pending
       end
     end
-  end
+    end
 
   describe "#has_pending_or_completed_invoice_for_next_month?" do
     let(:customer) { Fabricate(:customer, payment_method: 'test_method') }
@@ -94,32 +99,32 @@ RSpec.describe Customer, type: :model do
         expect(customer.has_pending_or_completed_invoice_for_next_month?).to be_truthy
       end
     end
-  end
+    end
 
   describe "#payment_processor" do
     let(:customer) { Fabricate(:customer, payment_method:) }
     let(:payment_method) { "credit_card" }
-  let(:processor) do
-    Class.new do
-      include Payments::Processor
+    let(:processor) do
+      Class.new do
+        include Payments::Processor
 
-      def initialize(customer)
-        @customer = customer
+        def initialize(customer)
+          @customer = customer
+        end
       end
     end
-  end
 
-  before do
-    Payments.configure do |config|
-      config.processors[payment_method] = processor
+    before do
+      Payments.configure do |config|
+        config.processors[payment_method] = processor
+      end
     end
-  end
 
-  after do
-    Payments.configure do |config|
-      config.processors = {}
+    after do
+      Payments.configure do |config|
+        config.processors = {}
+      end
     end
-  end
 
     it "returns the correct payment processor" do
       expect(customer.payment_processor).to be_a processor

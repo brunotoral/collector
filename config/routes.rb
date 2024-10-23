@@ -3,6 +3,10 @@ Rails.application.routes.draw do
     resources :invoices, except: %i[new create destroy]
   end
 
+  namespace :customers do
+    resources :invoices
+  end
+
   get "invoice_reports",  to: "invoice_reports#index"
 
   devise_for :users

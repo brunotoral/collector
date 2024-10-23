@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class PagarMePix
-  class ConectionError < StandardError; end
+class PagarMe::Pix
+  class ConnectionError < StandardError; end
 
   def self.create(**opts)
     bar = [ 1, 2, 3, 4, 5, 6 ].sample
