@@ -91,6 +91,16 @@ RSpec.describe ProcessPaymentJob, type: :job do
       expect(last_invoice).to be_pending
     end
 
+    it 'does not charge twice' do
+     invoice.completed!
+
+      perform_enqueued_jobs do
+        job
+      end
+
+      expect(processor).not_to have_received(:charge).with(invoice)
+    end
+
     it 'logs the error info' do
       perform_enqueued_jobs do
         job

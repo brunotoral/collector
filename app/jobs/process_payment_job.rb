@@ -23,6 +23,8 @@ class ProcessPaymentJob < ApplicationJob
 
   def perform(invoice)
     invoice.with_lock do
+      discard! unless invoice.incomplete?
+
       processor = invoice.payment_processor
 
       processor.charge(invoice)

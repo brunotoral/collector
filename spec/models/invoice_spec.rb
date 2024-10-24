@@ -13,6 +13,7 @@ RSpec.describe Invoice, type: :model do
   describe 'delegations' do
     it { is_expected.to delegate_method(:payment_processor).to(:customer) }
   end
+
   describe 'validations' do
     it { is_expected.to validate_presence_of :payment_method }
     it { is_expected.to validate_presence_of :due_date }
@@ -21,6 +22,28 @@ RSpec.describe Invoice, type: :model do
 
   describe 'enums' do
     it { is_expected.to define_enum_for(:status).with_values(%i[pending failed completed]) }
+  end
+
+  describe '#incomplete?' do
+    let(:invoice) { Fabricate(:invoice, status:) }
+
+    context 'when status is failed' do
+      let(:status) { :failed }
+
+      it { expect(invoice).to be_incomplete }
+    end
+
+    context 'when status is pending' do
+      let(:status) { :pending }
+
+      it { expect(invoice).to be_incomplete }
+    end
+
+    context 'when status is completed' do
+      let(:status) { :completed }
+
+      it { expect(invoice).not_to be_incomplete }
+    end
   end
 
   it 'calculates the dua date correctly' do

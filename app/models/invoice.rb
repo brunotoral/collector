@@ -12,6 +12,10 @@ class Invoice < ApplicationRecord
 
   delegate :payment_processor, to: :customer
 
+  def incomplete?
+    pending? || failed?
+  end
+
   private
 
   def calcule_due_date

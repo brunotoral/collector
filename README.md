@@ -66,10 +66,10 @@ To Add a new payment method you just need to:
 Create a Processor in `app/models/payments/processors/my_processor.rb` and include `Payments::Processor` Module.
 ```ruby
 module Payments
-	module Processors
-		include Payments::Processor
-		# ...
-	end
+  module Processors
+    include Payments::Processor
+    # ...
+  end
 end
 ```
 
