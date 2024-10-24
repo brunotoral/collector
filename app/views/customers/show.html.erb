@@ -1,4 +1,23 @@
-<h4>Customer</h4>
+<nav>
+  <ul>
+    <h4>Customer</h4>
+  </ul>
+
+  <ul>
+    <li>
+      <%= button_to "Back to customers", customers_path, method: :get %>
+    </li>
+    <li>
+      <%= button_to "Invoices", customer_invoices_path(@customer), method: :get %>
+    </li>
+    <li>
+      <%= button_to "Edit", edit_customer_path(@customer), method: :get %>
+    </li>
+    <li>
+      <%= button_to "Destroy", @customer, method: :delete, form: {data: {turbo_confirm: 'Are you sure?'} } %>
+    </li>
+  </ul>
+</nav>
 
 <table id="customer" class="striped">
   <thead data-theme="light">
@@ -39,9 +58,3 @@
   </tbody>
 </table>
 
-<div role="group">
-  <%= link_to "Back to customers", customers_path %>
-  <%= link_to "Invoices", customer_invoices_path(@customer) %>
-  <%= link_to "Edit", edit_customer_path(@customer) %>
-  <%= button_to "Destroy", @customer, method: :delete %>
-</div>

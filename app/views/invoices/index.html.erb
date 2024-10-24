@@ -1,6 +1,16 @@
 <% content_for :title, "Invoices" %>
 
-<h4>Invoices</h4>
+<nav>
+  <ul>
+    <h4>Invoices</h4>
+  </ul>
+
+  <ul>
+    <li>
+      <%= button_to "Back to customer", customers_path(@customer), method: :get %>
+    </li>
+  </ul>
+</nav>
 
 <table id="invoices" class="striped">
   <thead data-theme="light">
@@ -25,5 +35,4 @@
 
 <%== pagy_nav(@pagy) %>
 
-<%= link_to 'Back to customer', customer_path(@customer) %>
 
