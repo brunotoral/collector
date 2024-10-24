@@ -1,4 +1,18 @@
-<%= render @invoice %>
+<table id="invoice" class="striped">
+  <thead data-theme="light">
+    <tr>
+      <th scope="col">Payment Method</th>
+      <th scope="col">Due Date</th>
+      <th scope="col">Status</th>
+      <th scope="col">Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="<%= dom_id @invoice %>">
+      <%= render @invoice %>
+    </tr>
+  </tbody>
+</table>
 
 <div>
   <%= link_to "Edit this invoice", edit_customer_invoice_path(@customer, @invoice) %> |

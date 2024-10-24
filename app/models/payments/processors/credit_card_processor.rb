@@ -39,9 +39,7 @@ module Payments
       end
 
       def send_notification(customer)
-        PaymentMailer.with(
-          customer:
-        ).credit_card_email.deliver_later
+        PaymentMailer.credit_card_email(customer).deliver_later
       end
 
       def subscribe_card(params = {})

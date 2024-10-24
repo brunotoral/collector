@@ -14,10 +14,10 @@ class PagarMe::Card
   end
 
   def self.charge(**opts)
-    bar = [ 1, 2, 3, 4, 5, 6 ].sample
-    if [ 1, 2 ].include? bar
+    bar = [ 1, 2, 3, 4, 5 ].sample
+    if 1 == bar
       raise ConnectionError, "Connection Error"
-    elsif [ 3, 4 ].include? bar
+    elsif 2 == bar
       raise NoFundsError, "Does not have money"
     else
       true

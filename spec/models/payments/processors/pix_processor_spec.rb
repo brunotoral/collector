@@ -23,7 +23,7 @@ RSpec.describe Payments::Processors::PixProcessor, type: :model do
   before do
     allow(Payments).to receive(:for).with('pix').and_return(described_class)
     allow(adapter).to receive(:create).and_return(api_response)
-    allow(mailer).to receive(:with).and_call_original
+    allow(mailer).to receive(:pix_email).and_call_original
   end
 
   describe 'subscribe' do
@@ -49,7 +49,7 @@ RSpec.describe Payments::Processors::PixProcessor, type: :model do
       it 'calls the mailer with right arguments' do
         processor.charge(invoice)
 
-        expect(mailer).to have_received(:with).with(customer:, url:)
+        expect(mailer).to have_received(:pix_email).with(customer, url)
       end
     end
 

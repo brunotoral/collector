@@ -37,10 +37,7 @@ puts "########## Creating invoices"
 today_customers = Customer.where(due_day: today.day)
 not_today_customers = Customer.where.not(due_day: today.day)
 
-create_and_update_invoice(today_customers, today)
-create_and_update_invoice(not_today_customers)
-
-def create_and_update_invoice(customer, date = nil)
+def create_and_update_invoice(customers, date = nil)
   customers.each do |customer|
     customer.create_next_invoice!
 
@@ -51,5 +48,8 @@ def create_and_update_invoice(customer, date = nil)
     end
   end
 end
+create_and_update_invoice(today_customers, today)
+create_and_update_invoice(not_today_customers)
+
 
 puts "########## Seed finished ##########"

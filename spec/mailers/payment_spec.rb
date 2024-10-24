@@ -5,10 +5,7 @@ RSpec.describe PaymentMailer, type: :mailer do
     let(:customer) { double(Customer, email: 'customer@example.com', name: "Bar") }
     let(:url) { 'https://boleto/123' }
     let(:mail) do
-      described_class.with(
-        customer: customer,
-        url: url
-      ).boleto_email.deliver_now
+      described_class.boleto_email(customer, url).deliver_now
     end
 
     it 'renders the subject' do
@@ -28,10 +25,7 @@ RSpec.describe PaymentMailer, type: :mailer do
     let(:customer) { double(Customer, email: 'customer@example.com', name: "Bar") }
     let(:url) { 'https://pix/123' }
     let(:mail) do
-      described_class.with(
-        customer: customer,
-        url: url
-      ).pix_email.deliver_now
+      described_class.pix_email(customer, url).deliver_now
     end
 
     it 'renders the subject' do
@@ -51,9 +45,7 @@ RSpec.describe PaymentMailer, type: :mailer do
     let(:customer) { double(Customer, email: 'customer@example.com', name: "Bar") }
     let(:url) { 'https://pix/123' }
     let(:mail) do
-      described_class.with(
-        customer: customer
-      ).credit_card_email.deliver_now
+      described_class.credit_card_email(customer).deliver_now
     end
 
     it 'renders the subject' do

@@ -29,7 +29,6 @@ class ProcessPaymentJob < ApplicationJob
 
       invoice.completed!
 
-
       invoice.customer.create_next_invoice!
 
       log_info(invoice)

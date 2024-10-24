@@ -28,10 +28,7 @@ module Payments
       attr_reader :customer
 
       def send_notification(customer, url)
-        PaymentMailer.with(
-          customer:,
-          url:,
-        ).boleto_email.deliver_later
+        PaymentMailer.boleto_email(customer, url).deliver_later
       end
 
       def create_transaction!(invoice, amount)

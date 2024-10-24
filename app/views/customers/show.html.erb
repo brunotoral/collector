@@ -41,6 +41,7 @@
 
 <div role="group">
   <%= link_to "Back to customers", customers_path %>
-  <%= link_to "Edit", edit_customer_path(@customer) %> 
+  <%= link_to "Invoices", customer_invoices_path(@customer) %>
+  <%= link_to "Edit", edit_customer_path(@customer) %>
   <%= button_to "Destroy", @customer, method: :delete %>
 </div>

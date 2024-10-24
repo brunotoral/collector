@@ -4,7 +4,7 @@ class CustomersController < ApplicationController
   before_action :set_customer, only: %i[show edit update destroy]
 
   def index
-    @customers = Customer.all
+    @customers = paginate(Customer.all)
   end
 
   def show

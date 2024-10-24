@@ -28,7 +28,7 @@ RSpec.describe Payments::Processors::CreditCardProcessor, type: :model do
   before do
     allow(Payments).to receive(:for).with('credit_card').and_return(described_class)
     allow(adapter).to receive(:create).and_return(api_response)
-    allow(mailer).to receive(:with).and_call_original
+    allow(mailer).to receive(:credit_card_email).and_call_original
   end
 
   describe 'subscribe' do
@@ -64,7 +64,7 @@ RSpec.describe Payments::Processors::CreditCardProcessor, type: :model do
 
         processor.charge(invoice)
 
-        expect(mailer).to have_received(:with).with(customer:)
+        expect(mailer).to have_received(:credit_card_email).with(customer)
       end
     end
 

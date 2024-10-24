@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe ProcessPaymentJob, type: :job do
   include ActiveJob::TestHelper
 
-  let(:invoice) { Fabricate(:invoice, status: :pending) }
+  let(:customer) { Fabricate(:customer, payment_method: 'boleto') }
+  let(:invoice) { Fabricate(:invoice, status: :pending, customer:) }
   subject(:job) { described_class.perform_later(invoice) }
 
   before do
@@ -85,7 +86,7 @@ RSpec.describe ProcessPaymentJob, type: :job do
         job
       end
 
-      last_invoice = invoice.customer.invoices.last
+      last_invoice = customer.invoices.last
 
       expect(last_invoice).to be_pending
     end

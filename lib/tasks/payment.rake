@@ -5,7 +5,7 @@ namespace :payment do
     invoices = Invoice.pending.where(due_date: Date.today).includes(:customer)
 
     puts "#### Scheduling payment processing..."
-    invoices.each { |invoice| ProcessPaymentJob.deliver_later(invoice) }
+    invoices.each { |invoice| ProcessPaymentJob.perform_later(invoice) }
 
     puts "#### Task completed successfully."
   end

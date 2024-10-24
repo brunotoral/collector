@@ -4,9 +4,9 @@ class PagarMe::Pix
   class ConnectionError < StandardError; end
 
   def self.create(**opts)
-    bar = [ 1, 2, 3, 4, 5, 6 ].sample
-    if bar.even?
-      raise ConectionError, "Conection Error"
+    bar = [ 1, 2 ].sample
+    if bar == 1
+      raise ConnectionError, "Conection Error"
     else
       {
         url: "http://pixurl.com.io"

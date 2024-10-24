@@ -5,7 +5,7 @@ class InvoicesController < ApplicationController
   before_action :set_invoice, except: :index
 
   def index
-    @invoices = @customer.invoices
+    @invoices = paginate(@customer.invoices)
   end
 
   def show

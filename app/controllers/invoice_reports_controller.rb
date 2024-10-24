@@ -2,7 +2,7 @@
 
 class InvoiceReportsController < ApplicationController
   def index
-    @invoices = filtered_invoices
+    @invoices = paginate(filtered_invoices)
   end
 
   private
@@ -10,7 +10,7 @@ class InvoiceReportsController < ApplicationController
   def filtered_invoices
     if %w[completed failed].include? params[:filter].to_s
       method = params[:filter] == "completed" ? :completed : :failed
-
+      args = {}
       base_query.send(method, *args)
     else
       base_query

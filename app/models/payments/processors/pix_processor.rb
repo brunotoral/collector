@@ -16,7 +16,7 @@ module Payments
       end
 
       def charge(invoice, amount = 50_000)
-        transaction = create_transaction(invoice, amount)
+        transaction = create_transaction!(invoice, amount)
 
         send_notification(customer, transaction[:url])
       rescue StandardError => e
@@ -27,7 +27,7 @@ module Payments
 
       attr_reader :customer
 
-      def create_transaction(invoice, amount)
+      def create_transaction!(invoice, amount)
         PagarMe::Pix.create(
           amount:,
           payment_method: invoice.payment_method,
@@ -38,7 +38,7 @@ module Payments
       end
 
       def send_notification(customer, url)
-        PaymentMailer.with(customer:, url:).pix_email.deliver_later
+        PaymentMailer.pix_email(customer, url).deliver_later
       end
 
       def log_and_raise_error(error)
