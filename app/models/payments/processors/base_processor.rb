@@ -6,12 +6,6 @@ module Payments
       include Payments::Processor
       include Payments::Errors
 
-      CONNECTION_ERRORS = [
-        PagarMe::Card::ConnectionError,
-        PagarMe::Pix::ConnectionError,
-        PagarMe::Boleto::ConnectionError
-      ].freeze
-
       def initialize(customer)
         @customer = customer
       end
@@ -46,10 +40,10 @@ module Payments
 
       def log_and_raise_error(error)
         case error
-        when *CONNECTION_ERRORS
+        when *ConnectionError::ERRORS
          log_error(error)
          raise ConnectionError.new
-        when PagarMe::Card::NoFundsError
+        when *NoFundsError::Errors
           log_error(error)
           raise NoFundsError.new
         else
