@@ -8,6 +8,12 @@ class Invoice < ApplicationRecord
 
   enum :status, %i[pending failed completed]
 
+  after_save do
+    unless incomplete?
+      ActionCable.server.broadcast "notifications", { message: "Invoice id: #{id} completed!" }
+    end
+  end
+
   before_validation :calcule_due_date, on: :create
 
   delegate :payment_processor, to: :customer

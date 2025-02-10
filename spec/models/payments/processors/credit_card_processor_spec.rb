@@ -80,5 +80,5 @@ RSpec.describe Payments::Processors::CreditCardProcessor, type: :model do
         expect(Rails.logger).to have_received(:error).once
       end
     end
-    end
+  end
 end

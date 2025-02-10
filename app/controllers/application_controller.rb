@@ -14,4 +14,10 @@ class ApplicationController < ActionController::Base
 
     paginated_collection
   end
+
+  def api_paginate(collection)
+    pagy, paginated_collection = pagy(collection, limit: 2)
+
+    { data: paginated_collection, pagy: pagy_metadata(pagy) }
+  end
 end
