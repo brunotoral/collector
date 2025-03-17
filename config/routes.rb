@@ -7,16 +7,6 @@ Rails.application.routes.draw do
     resources :invoices
   end
 
-  get "/react/nav_bar", to: "react#nav_bar"
-  get "/react/customers", to: "react#customers"
-  get "/react/invoice_reports", to: "react#invoice_reports"
-  get "/react/customers/new", to: "react#new_customer"
-  post "/react/customers", to: "react#create_customer"
-  get "/react/foobar", to: "react#foobar"
-  get "/react/address", to: "react#address"
-  get "/react/customer/edit", to: "react#edit_customer"
-  put "/react/customer_update", to: "react#update_customer"
-
   get "invoice_reports",  to: "invoice_reports#index"
 
   devise_for :users
