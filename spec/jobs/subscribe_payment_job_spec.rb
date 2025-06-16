@@ -4,12 +4,6 @@ RSpec.describe SubscribePaymentJob, type: :job do
   include ActiveJob::TestHelper
 
   let!(:customer) do
-   # Customer.create(
-   #   due_day: Faker::Number.between(from: 1, to: 31),
-   #   email: Faker::Internet.email,
-   #   name: Faker::Movies::LordOfTheRings.character,
-   #   payment_method: 'credit_card'
-   # )
     Fabricate.create(:customer, payment_method: 'credit_card')
   end
   let(:credit_card_params) do
