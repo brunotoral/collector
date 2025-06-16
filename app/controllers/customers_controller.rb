@@ -23,8 +23,7 @@ class CustomersController < ApplicationController
     @customer = Customer.new(customer_params.except(:credit_card))
 
     if @customer.save
-      @customer.payment_processor.subscribe(customer_params[:credit_card])
-      @customer.create_next_invoice!
+      SubscribePaymentJob.perform_later(@customer, customer_params[:credit_card])
 
       redirect_to @customer, notice: "Customer was successfully created."
     else

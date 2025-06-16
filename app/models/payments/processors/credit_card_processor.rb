@@ -4,7 +4,7 @@ module Payments
   module Processors
     class CreditCardProcessor < BaseProcessor
       def subscribe(options = {})
-        transaction = subscribe_card(**options.to_h)
+        transaction = subscribe_card(**options)
 
         customer.create_credit_card! transaction
       end
