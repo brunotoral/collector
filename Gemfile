@@ -42,7 +42,7 @@ gem "devise"
 gem "whenever", require: false
 
 # Pagination
-gem "pagy", "~> 9.1"
+gem "pagy", "~> 9.3"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
